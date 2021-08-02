@@ -1,0 +1,11 @@
+{
+  "name": "@stackoff/schema",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Running test command schema\" && exit 1",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}

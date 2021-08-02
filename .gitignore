@@ -89,6 +89,7 @@ dist
 
 # Libs build folder
 build
+lib
 
 # Gatsby files
 .cache/
