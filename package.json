@@ -1,0 +1,14 @@
+{
+  "name": "stackoff",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Running test command\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polubis/Billennium-workshops-02-Lerna-and-monorepo.git"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
