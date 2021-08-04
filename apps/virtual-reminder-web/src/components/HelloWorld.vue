@@ -32,6 +32,9 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { Schema, minLength } from '@stackoff/schema'
+
+console.log(Schema('', [minLength(2)]))
 
 @Options({
   props: {
