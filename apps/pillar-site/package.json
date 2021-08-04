@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@fontsource/roboto": "^4.4.5",
+    "@stackoff/schema": "^1.0.0",
     "firebase": "^8.6.8",
     "gatsby": "^3.7.0",
     "gatsby-plugin-env-variables": "^2.1.0",

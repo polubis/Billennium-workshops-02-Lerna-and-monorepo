@@ -187,7 +187,7 @@ https://github.com/lerna/lerna
 - `npx lerna clean` - usuwa wszystkie `node_modules` w każdej paczce.
 - `npx lerna bootstrap` - `npm install` w każdej paczce z uwzględnieniem zależności między nimi.
 - `npx lerna exec "npm i"` - pozwala na uruchomienie innych poleceń.
-- `taskkill /im node.exe` - w cmd ubija wszystkie procesy `node`. Przydaje się gdy zablokowaliśmy jakiś port.
+- `taskkill /f /im node.exe` - w cmd ubija wszystkie procesy `node`. Przydaje się gdy zablokowaliśmy jakiś port.
 
 ## Implementacja mono-repo
 

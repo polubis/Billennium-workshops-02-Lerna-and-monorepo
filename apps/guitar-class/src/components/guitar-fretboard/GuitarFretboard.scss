@@ -1,0 +1,79 @@
+.container {
+  padding: 32px;
+  width: max-content;
+}
+
+.fretboard {
+  position: relative;
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background: #f2f2f2;
+  }
+
+  .string {
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: black;
+    left: 0;
+  }
+
+  .sound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    border-radius: 50%;
+    background: red;
+    font-family: "Roboto";
+    cursor: pointer;
+  }
+
+  .fret {
+    position: absolute;
+    height: calc(100% + 2px);
+    width: 2px;
+    background: black;
+  }
+}
+
+.fretsLabels {
+  position: relative;
+  margin-top: 52px;
+
+  .fretLabel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .fretLabelContent {
+      padding: 10px;
+      background: #f2f2f2;
+      text-align: center;
+      width: max-content;
+    }
+  }
+}
+
+.filters {
+  position: relative;
+  margin-bottom: 32px;
+
+  .soundPicker {
+    width: 200px;
+    margin: 0 20px;
+  }
+
+  .slider {
+    max-width: 500px;
+  }
+
+  .stringPicker {
+    width: 200px;
+  }
+}
