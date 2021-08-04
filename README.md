@@ -1,6 +1,5 @@
 # Billennium-workshops-02-Lerna-and-monorepo
 
-
 ## Mono-repo vs multi-repo vs monolit
 
 ![](https://itzone.com.vn/wp-content/uploads/2020/12/6ed2d04e-dde1-485a-a10c-7dc6d9a887a8.jpeg)
@@ -9,26 +8,21 @@
 
 ![](https://miro.medium.com/max/540/1*jVGw66Ku1K2HslRGKcQT2w.jpeg)
 
-Jedno repozytorium wraz z konkretnym podziałem na moduły. Każdy moduł to oddzielna paczka z innym setupem. Często
-moduły konsumują się.
+Jedno repozytorium wraz z konkretnym podziałem na projekty. Każdy projekt to oddzielny `package.json` z innym setupem. W `mono-repo` projekty zależą od siebie.
 
-Przykładowo `moduł A (aplikacja admina)` wykorzystuje `moduł B (biblioteke komponentów)` oraz `moduł C (aplikacja mobilna)` również wykorzystuje `moduł B`.
-
-Podobnie jak `typescript` inwestycja, która zwraca się po czasie.
+Przykładowo `projekt A (aplikacja admina)` wykorzystuje `projekt B (biblioteke komponentów)` oraz `projekt C (aplikacja mobilna)` również wykorzystuje `projekt B (biblioteke komponentów)`.
 
 #### Zalety
 
 - Możliwość niezależnej pracy dla developerów.
 - Mniejsza ilość konfliktów.
-- Szybszy build time.
-- Możliwość uruchomienia tylko części systemu.
-- Szybszy development.
-- Zmiana czegoś w całym systemie jest prosta - mamy jedno repozytorium kodu, podzielone logicznie.
+- Szybszy development - możliwość budowania tylko konkretnej części systemu.
+- Zmiana czegoś w całym systemie jest prosta - mamy jedno repozytorium kodu, podzielone na projekty.
 - Schludne drzewo `gita`.
 - Możliwość łatwego cofnięcia się w czasie w developmencie.
 - Możliwość współdzielenia konfigów do `typescript`, `webpack` oraz innych.
-- Łatwo wydzielić pracę dla dużego zespłu.
-- Mniej problemów przy wymyślaniu nazw.
+- Łatwo wydzielić pracę dla dużego zespołu.
+- Mniej problemów przy wymyślaniu nazw - ich kolizji.
 
 #### Wady
 
@@ -36,12 +30,13 @@ Podobnie jak `typescript` inwestycja, która zwraca się po czasie.
 - Management bez narzędzi jak `lerna` to koszmar.
 - Konfiguracja `CI & CD` jest ciężka.
 - Wymaga doświadzonej osoby, która umie sobie poradzić z konfiguracją.
+- Dodatkowe zależności w developmencie.
 
 ### Monolit
 
-Kod całego systemu / aplikacji umiejscowiony w jednym repozytorium. Brak jakiegokolwiek podziału na jednostki logiczne. Wszystko jest ze sobą ściśle powiązane.
+Kod całego projektu umiejscowiony w jednym repozytorium. Brak podziału na jednostki logiczne. Wszystko jest ze sobą ściśle powiązane.
 
-Przykładowo może to być jakiś silnik reguł walidacyjnych albo do obsługi animacji zapisany w jednym pliku.
+Przykładowo może to być jakiś silnik reguł walidacyjnych albo do obsługi animacji.
 
 #### Zalety
 
@@ -55,8 +50,8 @@ Przykładowo może to być jakiś silnik reguł walidacyjnych albo do obsługi a
 #### Wady
 
 - Łatwo o konflikty.
-- W momencie rozrostu funkcjonalności robi się bałagan.
-- Większe ryzyko dojścia do momentu, w którym utrzymanie takiego rozwiązania będzie tak kosztowne, że lepiej będzie je przepisania.
+- Ciężko się skaluje.
+- Większe ryzyko dojścia do momentu, w którym utrzymanie takiego rozwiązania będzie tak kosztowne, że potrzebny będzie większy refactor.
 - Trudno podzielić pracę.
 - Łatwo o kolizję nazw.
 
@@ -68,14 +63,14 @@ Praktycznie tak samo jak wyżej. Koncept urozmaicony dodatkowym wewnętrznym pod
 
 ### Multi-repo
 
-Koncept, w którym aplikacje, biblioteki są rozdzielone na osobne repozytoria.
+Koncept, w którym projekty są rozdzielone na osobne repozytoria.
 
 #### Zalety
 
 - Szybki build time.
 - Niezależny development.
 - Konflikty tylko wewnątrz jakiejś części rozwiązania, a nie całości.
-- Łatwo wydzielić pracę dla dużego zespłu.
+- Łatwo wydzielić pracę dla dużego zespołu.
 - Brak problemów przy kolizjach nazw.
 
 #### Wady
@@ -83,7 +78,6 @@ Koncept, w którym aplikacje, biblioteki są rozdzielone na osobne repozytoria.
 - Wprowadzenie zmiany na `cały` system jest czasochłonne.
 - Duplikujemy ciągle tą sama prace - konfiguracje.
 - Cieżko prześledzić zmiany na całym systemie.
-- Duplikowanie tej samej pracy.
 - Ciężko współdzielić kod. Trzeba ciągle podnosić wersje bibliotek, z których
   się korzysta.
 - Uruchomienie całego rozwiązania wymaga ściągnięcia innych repozytoriów oraz
@@ -93,7 +87,7 @@ Koncept, w którym aplikacje, biblioteki są rozdzielone na osobne repozytoria.
 
 ![](https://digitaloutcomes.io/wp-content/uploads/2021/06/what-is-micro-frontends.jpg)
 
-Podejście, w którym dzielimy aplikacje na mniejsze moduły pisane w różnych technologiach, które potem łączymy w całą aplikacje. Podejście nie ma nic wspólnego ze sposobem organizacji kodu w repozytorium.
+Podejście, w którym dzielimy aplikacje na mniejsze moduły pisane w różnych technologiach, które potem łączymy w całą aplikacje. 
 
 Do połączenia ich w całość zazwyczaj wykorzystuje się warstwę abstrakcji, coś co przekształca komponent `angulara, vue, react` w coś co przeglądarka zrozumie. Tutaj idealnym przykładem będzie integracja komponentu `react` z `web component`. Później taki komponent można użyć w dowolnej apce `react, vue czy angular`.
 
@@ -133,7 +127,7 @@ https://blog.nrwl.io/monorepos-and-react-microfrontends-a-perfect-match-d49dca64
 
 `lerna` wykorzystuje domyślnie konwencje, że każdy projekt wrzucamy do katalogu `packages`. Z innej konwencji korzysta narzędzie `nx` - tworzy dwa katalogi `apps` dla aplikacji oraz `libs` dla bibliotek.
 
-Należy pamiętać, że w przypadku `lerny` można to łatwo zmienić i zastosować własne konwencję. W przykładzie stosujemy konwencję z narzędzia `nx` czyli katalogi `apps` i `libs`.
+Należy pamiętać, że w przypadku `lerny` można to łatwo zmienić i zastosować własne konwencje. W przykładzie stosujemy konwencję z narzędzia `nx` czyli katalogi `apps` i `libs`.
 
 ## Lerna
 
