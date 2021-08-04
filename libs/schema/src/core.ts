@@ -19,6 +19,11 @@ export const required = createValidator<string>(
   "required"
 );
 
+export const empty = createValidator<unknown[]>(
+  (value) => value.length === 0,
+  "empty"
+);
+
 export const min = (limit: number) =>
   createValidator<number>((value) => value < limit, "min");
 
