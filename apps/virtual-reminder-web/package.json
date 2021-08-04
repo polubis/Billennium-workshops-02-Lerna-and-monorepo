@@ -1,7 +1,6 @@
 {
   "name": "@stackoff/virtual-reminder-web",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build"

@@ -8,7 +8,7 @@ const App = () => {
   console.log(Schema("", [required, minLength(2), maxLength(10)]).valid());
   console.log(Schema(10, [min(10)]).valid());
 
-  return <div>React application</div>;
+  return <div>React custom webpack config</div>;
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));

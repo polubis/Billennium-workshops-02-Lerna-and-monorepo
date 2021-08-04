@@ -8,7 +8,7 @@
 
 ![](https://miro.medium.com/max/540/1*jVGw66Ku1K2HslRGKcQT2w.jpeg)
 
-Jedno repozytorium wraz z konkretnym podziałem na projekty. Każdy projekt to oddzielny `package.json` z innym setupem. W `mono-repo` projekty zależą od siebie.
+Jedno repozytorium wraz z konkretnym podziałem na projekty. Każdy projekt to oddzielny `package.json` z innym setupem. W `mono-repo` projekty mogą mieć zależności względem siebie.
 
 Przykładowo `projekt A (aplikacja admina)` wykorzystuje `projekt B (biblioteke komponentów)` oraz `projekt C (aplikacja mobilna)` również wykorzystuje `projekt B (biblioteke komponentów)`.
 
@@ -23,6 +23,8 @@ Przykładowo `projekt A (aplikacja admina)` wykorzystuje `projekt B (biblioteke 
 - Możliwość współdzielenia konfigów do `typescript`, `webpack` oraz innych.
 - Łatwo wydzielić pracę dla dużego zespołu.
 - Mniej problemów przy wymyślaniu nazw - ich kolizji.
+- Łatwo nadać komuś uprawnienia - robimy to raz i problem z głowy.
+- Developer z `projekt A` może wejść i zrobić coś w `projekt B`.
 
 #### Wady
 
@@ -82,14 +84,15 @@ Koncept, w którym projekty są rozdzielone na osobne repozytoria.
   się korzysta.
 - Uruchomienie całego rozwiązania wymaga ściągnięcia innych repozytoriów oraz
   dodatkowej konfiguracji.
+- Do każdego repo trzeba nadwać uprawnienia.
 
 ## Micro-frontends
 
 ![](https://digitaloutcomes.io/wp-content/uploads/2021/06/what-is-micro-frontends.jpg)
 
-Podejście, w którym dzielimy aplikacje na mniejsze moduły pisane w różnych technologiach, które potem łączymy w całą aplikacje. 
+Podejście, w którym dzielimy aplikacje na mniejsze moduły pisane w różnych technologiach, które potem łączymy w całą aplikacje.
 
-Do połączenia ich w całość zazwyczaj wykorzystuje się warstwę abstrakcji, coś co przekształca komponent `angulara, vue, react` w coś co przeglądarka zrozumie. Tutaj idealnym przykładem będzie integracja komponentu `react` z `web component`. Później taki komponent można użyć w dowolnej apce `react, vue czy angular`.
+Do połączenia ich w całość zazwyczaj wykorzystuje się warstwę abstrakcji, coś co przekształca komponent `angulara, vue, react` w coś co przeglądarka zrozumie. Tutaj idealnym przykładem będzie przekształcenie komponentu `react` w `web component`. Później taki komponent można użyć w dowolnej apce `react, vue czy angular`.
 
 ```js
 // Ręczne przekształcenie
@@ -113,10 +116,7 @@ customElements.define("x-search", XSearch);
 // https://github.com/bitovi/react-to-webcomponent
 
 // Użycie w react
-return (
-  <x-search name="custom-name">
-  </x-search>
-);
+<x-search name="custom-name"></x-search>;
 ```
 
 ## Micro-frontends + mono-repo
@@ -125,41 +125,47 @@ https://blog.nrwl.io/monorepos-and-react-microfrontends-a-perfect-match-d49dca64
 
 ## Podział projektów w mono-repo
 
-`lerna` wykorzystuje domyślnie konwencje, że każdy projekt wrzucamy do katalogu `packages`. Z innej konwencji korzysta narzędzie `nx` - tworzy dwa katalogi `apps` dla aplikacji oraz `libs` dla bibliotek.
+`lerna` wykorzystuje domyślnie konwencje, w której każdy projekt wrzucamy do katalogu `packages`. Z innej konwencji korzysta narzędzie `nx` - tworzy dwa katalogi `apps` dla aplikacji oraz `libs` dla bibliotek.
 
 Należy pamiętać, że w przypadku `lerny` można to łatwo zmienić i zastosować własne konwencje. W przykładzie stosujemy konwencję z narzędzia `nx` czyli katalogi `apps` i `libs`.
+
+```json
+{
+  // Lerna będzie szukać plików package.json w katalogach znajdujących się w apps oraz libs.
+  "packages": ["apps/*", "libs/*"],
+}
+```
 
 ## Lerna
 
 https://github.com/lerna/lerna
 
-- Udostępnia szereg poleceń ułatwiających pracę z projektami podzielonymi na wiele paczek.
-- Narzędzie śledzi zależności pomiędzy paczkami.
-- Pozwala na uruchomienie konkretnych poleceń na wielu paczkach w tym samym momencie.
-- Śledzi zależności w sposób `topologiczny` - czyli sprawdza co jest zależne od czego.
+- Udostępnia szereg poleceń ułatwiających pracę z mono-repo.
+- Narzędzie śledzi zależności pomiędzy projektami.
+- Pozwala na uruchomienie konkretnych poleceń na wielu projektach w tym samym momencie.
+- Śledzi zależności w sposób `topologiczny` - czyli sprawdza co jest zależne od czego i uruchamia to "coś" w odpowiedniej kolejności.
 
 ## Polecenia
 
-- `npx lerna init` - tworzy plik konfiguracyjny. 
-```json
-{
-  // Informacja gdzie znajdują się nasze paczki.
-  "packages": ["apps/*", "libs/*"],
-  "version": "0.0.0"
-}
-```
+- `npx lerna init` - tworzy plik konfiguracyjny.
+
 - `npx lerna ls` - wyświetla wszystkie paczki.
+
 ```js
 @stackoff/budget-bot-web
 @stackoff/schema
 ```
+
 - `npx lerna ls --toposort` - wyświetla wszystkie paczki biorąc pod uwagę ich zależności względem siebie.
+
 ```js
 // Lerna "wie", że schema jest używana w paczce "budget-bot-web" więc dlatego pokazała ją jako pierwszą.
 @stackoff/schema
 @stackoff/budget-bot-web
 ```
+
 - `npx lerna ls --graph` - pokazuje zależności każdej paczki.
+
 ```js
 {
   "@stackoff/budget-bot-web": [
@@ -172,6 +178,7 @@ https://github.com/lerna/lerna
   "@stackoff/schema": []
 }
 ```
+
 - `npx lerna ls --long` - wyświetli paczki oraz ich wersje.
 - `npx lerna run start --parellel` - uruchomi polecenie start w każdej paczce.
 - `npx lerna run --scope @stackoff/budget-bot-web start` - uruchomi polecenie `start` w paczce `budget-bot-web`.
@@ -180,6 +187,7 @@ https://github.com/lerna/lerna
 - `npx lerna clean` - usuwa wszystkie `node_modules` w każdej paczce.
 - `npx lerna bootstrap` - `npm install` w każdej paczce z uwzględnieniem zależności między nimi.
 - `npx lerna exec "npm i"` - pozwala na uruchomienie innych poleceń.
+- `taskkill /im node.exe` - w cmd ubija wszystkie procesy `node`. Przydaje się gdy zablokowaliśmy jakiś port.
 
 ## Implementacja mono-repo
 
@@ -198,22 +206,28 @@ Wystarczy prześledzić commity. Jak zawsze plik `README` do pominięcia.
 - Wydzielić modele `ts` do oddzielnej libki. Można później używać jej na `fe/be`.
 - Skonfigurować globalne reguły `eslinta` oraz `prettiera` dla wszystkich paczek. Jeżeli jest jakiś wyjątek w konkretnej paczce to zawsze można nadpisać.
 - Utrzymywać w te same konwencje we wszystkich paczkach. Do tego można przygotować jakiś plik `README`.
-- Napisać skrypty w `node`, które tworzą paczkę. Przykładowo `stackoff lib --ts` - stworzy cały katalog i przygotuje `boilerplate` pod bibliotekę. 
+- Napisać skrypty w `node`, które tworzą paczkę. Przykładowo `stackoff lib --ts` - stworzy cały katalog i przygotuje `boilerplate` pod bibliotekę.
 
 ## Alternatywy
 
 - Jeżeli projekt nie jest duży i chcemy wydzielić sobie bibliotekę jako osobną paczkę to zawsze możemy stworzyć taką paczkę i poprostu ją zainstalować jako lokalny moduł za pomocą polcenia `npm install 'scieżka do paczki'`.
-- Wykorzystać profesjonaly tool `nx` od `nrwl`. Narzędzie, które posiada ogromne `cli`, które przygotowuje projekt w dowolnej technologi i pozwala na łatwe zarządzanie `mono-repo` czy nawet stworzenie rozwiązania typu `micro-fe`.
+- Możemy wykorzystać tool `nx` od `nrwl`. Narzędzie, które posiada ogromne `cli`, które przygotowuje projekt w dowolnej technologii i pozwala na łatwe zarządzanie `mono-repo` czy nawet stworzenie rozwiązania typu `micro-fe`.
 
 ## Podsumowanie
 
-To jakie podejście zastosować przy developmencie aplikacji zależy od jej rodzaju.
+To jakie podejście zastosować przy developmencie rozwiązań zależy od kilku czynników. 
 
-Tak w skrócie:
+- To z kim pracujesz.
+- To czy współpracownicy są z tej samej firmy.
+- To czym będziesz chciał współdzielić kod oraz reużywać go w innych rozwiązaniach.
+- To jak duży jest twój zespół i w jakich technologiach poruszają się developerzy.
+- Jakie doświadczenie mają developerzy.
 
-- `Mono-repo` warto stosować gdy w planujesz budować wiele rozwiązań i współdzielić określony kod pomiędzy nimi. Przykładowo jeżeli firma rozwija wiele aplikacji równocześnie to istnieje spora szansa, że część kodu pisanego przez innych developerów może się przydać. 
+Przykładowo:
+
+- `Mono-repo` warto stosować gdy w planujesz budować wiele rozwiązań i współdzielić określony kod pomiędzy nimi. Jeżeli firma rozwija wiele aplikacji równocześnie to istnieje spora szansa, że część kodu pisanego przez innych developerów może się przydać.
+W kontekście `Billennium` - `DCMT, apka do raportowania godzin, kody projektowe`.
 
 - `Multi-repo` warto użyć w momencie gdy aplikacje są tak unikalne, że raczej nie ma możliwości reużywania kodu, a jeżeli juz to zawsze można napisać bibliotekę i opublikować ja na `npm`.
 
 - `Monolit` warto wykorzystać gdy nie potrzebujesz współdzielenia kodu i wiesz, że pisana przez Ciebie aplikacja czy biblioteka jest specyficzna. Zawsze dla przejrzystości można dokonać podziału wewnątrz dla skalowalności i przejrzystości rozwiązania stosując `modularny monolit`.
-
